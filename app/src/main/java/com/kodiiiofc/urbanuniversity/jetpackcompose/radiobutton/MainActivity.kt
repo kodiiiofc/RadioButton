@@ -18,30 +18,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kodiiiofc.urbanuniversity.jetpackcompose.radiobutton.ui.theme.RadioButtonTheme
 
@@ -84,7 +80,10 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Column(
-                    Modifier.fillMaxSize().padding(8.dp).verticalScroll(rememberScrollState()),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
@@ -95,7 +94,9 @@ class MainActivity : ComponentActivity() {
                             .padding(16.dp)
                     ) {
                         Image(
-                            painter = painterResource(carImageResourceMap[selectedColor] ?: R.drawable.white),
+                            painter = painterResource(
+                                carImageResourceMap[selectedColor] ?: R.drawable.white
+                            ),
                             contentDescription = "Изображение автомобиля",
                             modifier = Modifier.height(200.dp)
                         )
@@ -112,21 +113,24 @@ class MainActivity : ComponentActivity() {
                                 .border(
                                     2.dp,
                                     if (key == selectedColor) Color.DarkGray else Color.Transparent,
-                                    CircleShape)
+                                    CircleShape
+                                )
                                 .selectable(
                                     selected = key == selectedColor,
-                                    onClick = {selectedColor = key}
+                                    onClick = { selectedColor = key }
                                 )
                             ) {
 
                                 Box(
                                     Modifier
                                         .size(24.dp, 12.dp)
-                                        .background(value.first))
+                                        .background(value.first)
+                                )
                                 Box(
                                     Modifier
                                         .size(24.dp, 12.dp)
-                                        .background(value.second))
+                                        .background(value.second)
+                                )
 
                             }
                         }
@@ -134,13 +138,23 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(Modifier.height(16.dp))
 
-                    Column (Modifier.fillMaxWidth()) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .selectableGroup()) {
 
                         for ((key, _) in carEquipmentMap) {
-                            Row (verticalAlignment = Alignment.CenterVertically) {
+                            Row(verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .selectable(
+                                        selected = selectedEquipment == key,
+                                        onClick = { selectedEquipment = key }
+                                    )
+                                    .fillMaxWidth()
+                            ) {
                                 RadioButton(
                                     selected = selectedEquipment == key,
-                                    onClick = {selectedEquipment = key}
+                                    onClick = { selectedEquipment = key }
                                 )
                                 Text(text = key)
 
@@ -151,8 +165,6 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(Modifier.height(16.dp))
 
-
-
                     Text(modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .fillMaxWidth()
@@ -162,8 +174,9 @@ class MainActivity : ComponentActivity() {
                             append("Стоимость от ")
                             withStyle(
                                 SpanStyle(
-                                fontWeight = FontWeight.Bold
-                            )) {
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
                                 append(carEquipmentMap[selectedEquipment])
                             }
                         }
